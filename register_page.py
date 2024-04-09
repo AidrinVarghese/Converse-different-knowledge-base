@@ -12,7 +12,7 @@ try:
     )
     if email_of_registered_user:
         # st.success("User registered successfully")
-        st.page_link("pages/login_page.py", label="Login Page")
+        st.page_link("login_page.py", label="Login Page")
 except Exception as e:
     st.error(e)
 
