@@ -1,7 +1,7 @@
 # Converse-different-knowledge-base
 
 <documentation>
-    <title>Streamlit Chatbot with Google Generative AI</title>
+    <h2>Streamlit Chatbot with Google Generative AI</h2>
     <description>
         This Streamlit application implements a chatbot powered by Google Generative AI (Gemini). Users can interact with the chatbot by typing messages in the input box. The chat history is displayed in real-time, including past conversations loaded from storage. The application allows users to pick from past chat sessions and continue conversations.
     </description>
