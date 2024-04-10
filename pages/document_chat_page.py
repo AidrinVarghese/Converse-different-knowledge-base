@@ -95,17 +95,21 @@ def main():
             "Upload your PDF Files and Click on the Submit & Process Button",
             accept_multiple_files=True,
         )
-                 
+
         if st.button("Submit & Process"):
             with st.spinner("Processing..."):
                 raw_text = get_pdf_text(pdf_docs)
                 text_chunks = get_text_chunks(raw_text)
                 get_vector_store(text_chunks)
                 st.success("Done")
-                
+
         if st.button("Log out"):
             logout()
-            
+
+    if st.button("Go back", type="secondary"):
+        st.session_state.logged_in = False
+        st.switch_page("pages/option_page.py")
+    
     st.title("Ask me anything in you PDF")
     st.write("Welcome to the chat!")
     st.sidebar.button("Clear Chat History", on_click=clear_chat_history)
@@ -137,7 +141,7 @@ def main():
         if response is not None:
             message = {"role": "assistant", "content": full_response}
             st.session_state.messages.append(message)
-            
+
 
 def logout():
     st.session_state.logged_in = False
