@@ -1,32 +1,128 @@
+import time
+import joblib
 import streamlit as st
 import os
 import google.generativeai as genai
+from dotenv import load_dotenv
 
-genai.configure(api_key=os.getenv("GOOGLE_GEMINI_KEY"))
-model = genai.GenerativeModel("gemini-pro")
+load_dotenv()
+
+os.getenv("GOOGLE_API_KEY")
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+
+new_chat_id = f"{time.time()}"
+MODEL_ROLE = "ai"
+AI_AVATAR_ICON = "✨"
+
+try:
+    os.mkdir("data/")
+except Exception:
+    pass
+
+try:
+    past_chats: dict = joblib.load("data/past_chats_list")
+except Exception:
+    past_chats = {}
 
 
-def role_to_streamlit(role):
-    if role == "model":
-        return "assistant"
+with st.sidebar:
+    st.write("# Past Chats")
+    if st.session_state.get("chat_id") is None:
+        st.session_state.chat_id = st.selectbox(
+            label="Pick a past chat",
+            options=[new_chat_id] + list(past_chats.keys()),
+            format_func=lambda x: past_chats.get(x, "New Chat"),
+            placeholder="_",
+        )
     else:
-        return role
-    
+        st.session_state.chat_id = st.selectbox(
+            label="Pick a past chat",
+            options=[new_chat_id, st.session_state.chat_id] + list(past_chats.keys()),
+            index=1,
+            format_func=lambda x: past_chats.get(
+                x,
+                (
+                    "New Chat"
+                    if x != st.session_state.chat_id
+                    else st.session_state.chat_title
+                ),
+            ),
+            placeholder="_",
+        )
+    st.session_state.chat_title = f"ChatSession-{st.session_state.chat_id}"
 
-if "chat" not in st.session_state:
-    st.session_state.chat = model.start_chat(history=[])
+st.write("# Chat with Converse(Gemini)")
 
-st.title("Chat with Converse!")
+try:
+    st.session_state.messages = joblib.load(
+        f"data/{st.session_state.chat_id}-st_messages"
+    )
+    st.session_state.gemini_history = joblib.load(
+        f"data/{st.session_state.chat_id}-gemini_messages"
+    )
+    print("old cache")
 
-for message in st.session_state.chat.history:
-    with st.chat_message(role_to_streamlit(message.role)):
-        st.markdown(message.parts[0].text)
+except Exception:
+    st.session_state.messages = []
+    st.session_state.gemini_history = []
+    print("new_cache made")
+st.session_state.model = genai.GenerativeModel("gemini-pro")
+st.session_state.chat = st.session_state.model.start_chat(
+    history=st.session_state.gemini_history,
+)
 
-if prompt := st.chat_input(
-    "I possess a well of knowledge. What would you like to know?"
-):
+for message in st.session_state.messages:
+    with st.chat_message(
+        name=message["role"],
+        avatar=message.get("avatar"),
+    ):
+        st.markdown(message["content"])
 
-    st.chat_message("user").markdown(prompt)
-    response = st.session_state.chat.send_message(prompt)
-    with st.chat_message("assistant"):
-        st.markdown(response.text)
+if prompt := st.chat_input("Your message here..."):
+
+    if st.session_state.chat_id not in past_chats.keys():
+        past_chats[st.session_state.chat_id] = st.session_state.chat_title
+        joblib.dump(past_chats, "data/past_chats_list")
+    with st.chat_message("user"):
+        st.markdown(prompt)
+    st.session_state.messages.append(
+        dict(
+            role="user",
+            content=prompt,
+        )
+    )
+
+    response = st.session_state.chat.send_message(
+        prompt,
+        stream=True,
+    )
+    with st.chat_message(
+        name=MODEL_ROLE,
+        avatar=AI_AVATAR_ICON,
+    ):
+        message_placeholder = st.empty()
+        full_response = ""
+        assistant_response = response
+        for chunk in response:
+            for ch in chunk.text.split(" "):
+                full_response += ch + " "
+                time.sleep(0.05)
+                message_placeholder.write(full_response + "▌")
+        message_placeholder.write(full_response)
+
+    st.session_state.messages.append(
+        dict(
+            role=MODEL_ROLE,
+            content=st.session_state.chat.history[-1].parts[0].text,
+            avatar=AI_AVATAR_ICON,
+        )
+    )
+    st.session_state.gemini_history = st.session_state.chat.history
+    joblib.dump(
+        st.session_state.messages,
+        f"data/{st.session_state.chat_id}-st_messages",
+    )
+    joblib.dump(
+        st.session_state.gemini_history,
+        f"data/{st.session_state.chat_id}-gemini_messages",
+    )
