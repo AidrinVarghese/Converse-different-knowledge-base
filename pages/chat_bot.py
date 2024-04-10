@@ -2,7 +2,7 @@ import streamlit as st
 import os
 import google.generativeai as genai
 
-genai.configure(api_key=os.getenv("GOOGLE_GEMINI_KEY"))
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 model = genai.GenerativeModel("gemini-pro")
 
 
@@ -15,6 +15,11 @@ def role_to_streamlit(role):
 
 if "chat" not in st.session_state:
     st.session_state.chat = model.start_chat(history=[])
+
+
+if st.button("Go back", type="secondary"):
+    st.session_state.logged_in = False
+    st.switch_page("pages/option_page.py")
 
 st.title("Chat with Converse!")
 
