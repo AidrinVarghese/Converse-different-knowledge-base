@@ -14,7 +14,7 @@ col1, col2, col3 = st.columns(3)
 with col1:
     st.write("Chat with CONVERSE!")
     if st.button("Convserse", type="primary"):
-        st.switch_page("pages/document_chat_page.py")
+        st.switch_page("pages/chat_bot.py")
 
 with col2:
     st.write("CONVERSE with Docs!")
