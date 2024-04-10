@@ -3,8 +3,8 @@
     <metadata>
         <h2>Streamlit Chatbot with Google Generative AI</h2>
         <author>
-            <name>Aidrin Varghese</name>
-            <email>aidrinv2001@gmail.com</email>
+            <p>Aidrin Varghese</p>
+            <p>aidrinv2001@gmail.com</p>
         </author>
         <date>April 10, 2024</date>
     </metadata>
