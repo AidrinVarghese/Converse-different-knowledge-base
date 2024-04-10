@@ -1,22 +1,22 @@
 # Converse-different-knowledge-base
 <documentation>
     <metadata>
-        <title>Streamlit Chatbot with Google Generative AI</title>
+        <h2>Streamlit Chatbot with Google Generative AI</h2>
         <author>
-            <name>Your Name</name>
-            <email>your@email.com</email>
+            <name>Aidrin Varghese</name>
+            <email>aidrinv2001@gmail.com</email>
         </author>
         <date>April 10, 2024</date>
     </metadata>
     <content>
         <section>
-            <title>Introduction</title>
+            <h4>Introduction</h4>
             <content>
                 <p>This Streamlit application implements a chatbot powered by Google Generative AI (Gemini). Users can interact with the chatbot by typing messages in the input box. The chat history is displayed in real-time, including past conversations loaded from storage. The application allows users to pick from past chat sessions and continue conversations.</p>
             </content>
         </section>
         <section>
-            <title>Dependencies</title>
+            <h4>Dependencies</h4>
             <content>
                 <p>This application relies on the following dependencies:</p>
                 <ul>
@@ -28,7 +28,7 @@
             </content>
         </section>
         <section>
-            <title>Features</title>
+            <h4>Features</h4>
             <content>
                 <p>The application provides the following features:</p>
                 <ul>
@@ -52,14 +52,14 @@
             </content>
         </section>
         <section>
-            <title>Implementation</title>
+            <h4>Implementation</h4>
             <content>
                 <p>The application uses Streamlit for the user interface, providing an intuitive web-based interface for users to interact with the chatbot. Integration with Google Generative AI enables the chatbot to generate intelligent responses based on user queries.</p>
                 <p>Chat history is stored locally using Joblib, allowing users to pick from past chat sessions and continue conversations seamlessly. The application architecture is modular and follows best practices for web application development.</p>
             </content>
         </section>
         <section>
-            <title>Future Improvements</title>
+            <h4>Future Improvements</h4>
             <content>
                 <p>Potential areas for future improvements include:</p>
                 <ul>
