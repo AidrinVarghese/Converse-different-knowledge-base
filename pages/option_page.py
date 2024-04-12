@@ -28,6 +28,6 @@ with col2:
 with col3:
     st.write("CONVERSE WITH DATABASE!")
     if st.button("CONV-DB", type="primary"):
-        st.switch_page("")
+        st.switch_page("pages/database_chat_page.py")
     
     
